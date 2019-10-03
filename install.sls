@@ -20,7 +20,6 @@ include:
 
 "Install Nifi":
   cmd.run:
-    - name: /opt/nifi/nifi-{{ version }}/bin/nifi.sh install
+    - name: /opt/nifi/nifi-{{ version }}/bin/nifi.sh install && systemctl enable nifi
     - onchanges:
       - archive: "Extract Nifi Archive"
-    

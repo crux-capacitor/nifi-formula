@@ -7,6 +7,7 @@
     - name: nifi
     - home: /opt/nifi
     - createhome: True
+    - shell: /bin/false
     - groups:
       - nifi
     - require:

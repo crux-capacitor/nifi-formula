@@ -1,15 +1,28 @@
 user:
-  name: nifi
 
 install:
   version: 1.9.2
 
 config:
-  http_port: 80
+  protocol: http              # http or https
+  port: 80
+
+  tls:
+    enabled: True
+    type: standalone          # standalone or server
 
 disk:
   enabled: False
   mount_point: /mnt
 
 cluster:
+
+{% if salt.pillar.get('nifi:cluster') %}
+# Set via pillar, which comes from AWS EC2 Instance User Data
+  enabled: True
+  name: {{ salt.pillar.get('nifi:cluster:name') }}
+{% else %}
+  # Set manually
   enabled: False
+  type: embedded              # embedded or external
+{% endif %}

@@ -1,0 +1,1 @@
+{{ salt.cmd.run('cat ' ~ zk_props_file ~ ' | grep ' ~ grains['fqdn'] ~ ' | awk -F"=" \'{print $1}\' | awk -F"." \'{print $2}\'', python_shell=True) }}
