@@ -7,6 +7,13 @@
 {%   set data_dir = '/opt/nifi/nifi-' ~ nifi.install.version %}
 {% endif %}
 
+{% set memory = (salt.grains.get('mem_total') / 3 * 2 / 1000) | round(0,'floor') | int %}
+{% if memory < 1 %}
+{%   set mem_size = '128m' %}
+{% else %}
+{%   set mem_size = memory ~ 'g' %}
+{% endif %}
+
 include:
   - formula.nifi.install
 
@@ -22,4 +29,4 @@ include:
         cluster: {{ nifi.cluster.enabled }}
         data_dir: {{ data_dir }}
         config: {{ nifi.config }}
-
+        mem_size: {{ mem_size }}

@@ -3,10 +3,8 @@ user:
 
 install:
   version: 1.9.2
-  source: salt://{{ slspath }}/files/
 
 config:
-  mem_size: {{ grains['mem_total'] }}/2
   http_port: 80
 
 disk:
