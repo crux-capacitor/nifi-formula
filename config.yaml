@@ -5,11 +5,18 @@ install:
 
 config:
   protocol: http              # http or https
-  port: 80
+  port: 8080
 
   tls:
     enabled: True
-    type: standalone          # standalone or server
+    type: standalone          # standalone or clientserver
+    server_addr: null         # fill this out if using clientserver
+    server_port: null         # fill this out if using clientserver
+
+  # Enabling this will configure some of the NiFi Recommended Best Practices
+  # See: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#configuration-best-practices
+  best_practices:
+    enabled: True
 
 disk:
   enabled: False
@@ -21,8 +28,17 @@ cluster:
 # Set via pillar, which comes from AWS EC2 Instance User Data
   enabled: True
   name: {{ salt.pillar.get('nifi:cluster:name') }}
+
+# Query all the nifi servers for their cluster name. If it matches this system's cluster name,
+# build the connect_string with those IPs.
+{% set nifi_servers = [] %}
+{#% for server in salt.mine.get('role:nifi', tgt_type='grain', 'nifi_cluster') %}
+{% endfor %#}
+  connect_string: {{ nifi_servers }}
+
 {% else %}
   # Set manually
-  enabled: False
-  type: embedded              # embedded or external
+  enabled: True
 {% endif %}
+  type: embedded              # embedded or external
+  connect_string: ''

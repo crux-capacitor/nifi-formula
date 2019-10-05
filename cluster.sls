@@ -1,6 +1,6 @@
 {% import_yaml slspath~'/config.yaml' as nifi %}
 {% set version = nifi.install.version %}
-{% set nifi_servers = ['abcd', 'efgh', 'ijkl', 'ubuntu'] %}
+{% set nifi_servers = ['abcd', 'efgh', 'ijkl', 'mnop', 'ubuntu'] %}
 
 {% if nifi.cluster.enabled %}
 

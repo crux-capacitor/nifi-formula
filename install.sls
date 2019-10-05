@@ -7,7 +7,7 @@ include:
   - formula.nifi.disk
 {%- endif %}
 
-"Extract Nifi Archive":
+"Extract NiFi Archive":
   archive.extracted:
     - name: /opt/nifi/
     - source: salt://{{ slspath }}/installers/nifi-{{ version }}-bin.tar.gz
@@ -18,8 +18,8 @@ include:
     - require:
       - sls: formula.nifi.user
 
-"Install Nifi":
+"Install NiFi":
   cmd.run:
     - name: /opt/nifi/nifi-{{ version }}/bin/nifi.sh install && systemctl enable nifi
     - onchanges:
-      - archive: "Extract Nifi Archive"
+      - archive: "Extract NiFi Archive"

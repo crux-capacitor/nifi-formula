@@ -1,0 +1,17 @@
+{% if 'cluster'= in grains['ec2']['user-data'] %}
+{%   for line in grains['ec2']['user-data'].splitlines() %}
+{%     if 'cluster=' in line %}
+{%       set name = line.split('=')[1] %}
+
+nifi:
+  cluster:
+    name: {{ name }}
+
+mine_functions:
+  nifi_cluster_name:
+    - mine_function: test.echo
+    - args:
+      - {{ name }}
+
+{%   endfor %}
+{% endif %}

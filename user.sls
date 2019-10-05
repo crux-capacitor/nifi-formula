@@ -1,8 +1,8 @@
-"Manage Nifi Group":
+"Manage NiFi Group":
   group.present:
     - name: nifi
 
-"Manage Nifi User":
+"Manage NiFi User":
   user.present:
     - name: nifi
     - home: /opt/nifi
@@ -11,4 +11,4 @@
     - groups:
       - nifi
     - require:
-      - group: "Manage Nifi Group"
+      - group: "Manage NiFi Group"

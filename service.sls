@@ -1,7 +1,7 @@
 include:
   - formula.nifi.install
 
-"Manage Nifi Service":
+"Manage NiFi Service":
   service.running:
     - name: nifi
     - enable: True
