@@ -43,7 +43,7 @@ include:
         config: {{ nifi.config|json }}
         mem_size: {{ mem_size }}
 
-{% if config.best_practices.enabled %}
+{% if nifi.config.best_practices.enabled %}
 
 "Manage Security Limits Config":
   file.managed:

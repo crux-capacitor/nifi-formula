@@ -10,8 +10,7 @@ nifi:
 mine_functions:
   nifi_cluster_name:
     - mine_function: test.echo
-    - args:
-      - {{ name }}
+    - {{ name }}
 
 {%   endfor %}
 {% endif %}

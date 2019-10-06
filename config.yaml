@@ -9,7 +9,7 @@ config:
 
   tls:
     enabled: True
-    type: standalone          # standalone or clientserver
+    type: standalone          # standalone or clientserver. Standalone will generate self-signed certs on each node.
     server_addr: null         # fill this out if using clientserver
     server_port: null         # fill this out if using clientserver
 
@@ -28,17 +28,29 @@ cluster:
 # Set via pillar, which comes from AWS EC2 Instance User Data
   enabled: True
   name: {{ salt.pillar.get('nifi:cluster:name') }}
+  type: embedded
 
-# Query all the nifi servers for their cluster name. If it matches this system's cluster name,
-# build the connect_string with those IPs.
+# The outer-loop returns the private_ip grain of all nifi servers.
+# The next inner-loop gets the nifi_cluster_name from each nifi server individually, and compares it to this
+# system's cluster_name. If they match, append to the zk_servers list.
 {% set nifi_servers = [] %}
-{#% for server in salt.mine.get('role:nifi', tgt_type='grain', 'nifi_cluster') %}
-{% endfor %#}
-  connect_string: {{ nifi_servers }}
+{% set zk_servers = [] %}
+{% for server, ip in salt.mine.get('role:nifi', 'private_ip', tgt_type='grain').items() %}
+{%   for name, cluster_name in salt.mine.get(server, 'nifi_cluster_name', tgt_type='glob').items() %}
+{%     if cluster_name == my_cluster_name %}
+{%       do nifi_servers.append(ip~':2181') %}
+{%       do zk_servers.append(ip) %}
+{%     endif %}
+{%   endfor %}
+{% endfor %}
+  connect_string: {{ nifi_servers|join(',') }}
+  #zk_servers: {{ zk_servers }}
+  zk_servers: ['ubuntu', 'abcd', 'efgh']
 
 {% else %}
   # Set manually
-  enabled: True
-{% endif %}
+  enabled: False
+  name: ''
   type: embedded              # embedded or external
   connect_string: ''
+{% endif %}

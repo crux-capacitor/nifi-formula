@@ -1,6 +1,5 @@
 {% import_yaml slspath~'/config.yaml' as nifi %}
 {% set version = nifi.install.version %}
-{% set nifi_servers = ['abcd', 'efgh', 'ijkl', 'mnop', 'ubuntu'] %}
 
 {% if nifi.cluster.enabled %}
 
@@ -13,7 +12,7 @@
     - template: jinja
     - user: nifi
     - context:
-        servers: {{ nifi_servers }}
+        servers: {{ nifi.cluster.zk_servers }}
 
 "Manage Zookeeper Id File":
   file.managed:
