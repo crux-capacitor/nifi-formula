@@ -1,11 +1,17 @@
 user:
+  name: nifi
+  home_dir: /opt/nifi
+
+group:
+  name: nifi
 
 install:
-  version: 1.9.2
+  version: 1.9.2  # Gets concatenated into nifi-<version>-bin.tar.gz
 
 config:
-  protocol: http              # http or https
-  port: 8080
+  web:
+    protocol: http              # http or https
+    port: 8080
 
   tls:
     enabled: True
@@ -25,32 +31,26 @@ disk:
 cluster:
 
 {% if salt.pillar.get('nifi:cluster') %}
-# Set via pillar, which comes from AWS EC2 Instance User Data
+# Import cluster.yaml, which has the logic to find the other NiFi servers to be clustered with.
+{% import_yaml slspath~'/cluster.yaml' as cluster %}
+
+# Dynamically set via pillar, which comes from AWS EC2 instance user data
   enabled: True
   name: {{ salt.pillar.get('nifi:cluster:name') }}
-  type: embedded
-
-# The outer-loop returns the private_ip grain of all nifi servers.
-# The next inner-loop gets the nifi_cluster_name from each nifi server individually, and compares it to this
-# system's cluster_name. If they match, append to the zk_servers list.
-{% set nifi_servers = [] %}
-{% set zk_servers = [] %}
-{% for server, ip in salt.mine.get('role:nifi', 'private_ip', tgt_type='grain').items() %}
-{%   for name, cluster_name in salt.mine.get(server, 'nifi_cluster_name', tgt_type='glob').items() %}
-{%     if cluster_name == my_cluster_name %}
-{%       do nifi_servers.append(ip~':2181') %}
-{%       do zk_servers.append(ip) %}
-{%     endif %}
-{%   endfor %}
-{% endfor %}
-  connect_string: {{ nifi_servers|join(',') }}
-  #zk_servers: {{ zk_servers }}
+  type: {{ salt.pillar.get('nifi:cluster:type, 'embedded') }}
+  connect_string: {{ cluster.connect_string }}
+  #zk_servers: {# cluster.zk_servers #}
   zk_servers: ['ubuntu', 'abcd', 'efgh']
 
 {% else %}
-  # Set manually
+  # Manual cluster configuration
   enabled: False
   name: ''
   type: embedded              # embedded or external
   connect_string: ''
 {% endif %}
+
+upgrade:
+  automatic: False  # Set to true to enable automatic upgrades.
+                    # If you change the version for install, on the next run of that
+                    # that state, the upgrade state will run automatically.
