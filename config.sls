@@ -27,6 +27,9 @@ include:
 {%- if nifi.cluster.enabled %}
   - formula.nifi.cluster
 {%- endif %}
+{%- if nifi.disk.enabled %}
+  - formula.nifi.disk
+{%- endif %}
 
 "Manage NiFi Config Files":
   file.recurse:
@@ -42,6 +45,10 @@ include:
         data_dir: {{ data_dir }}
         config: {{ nifi.config|json }}
         mem_size: {{ mem_size }}
+{%- if nifi.disk.enabled %}
+    - require:
+      - sls: formula.nifi.disk
+{%- endif %}
 
 {% if nifi.config.best_practices.enabled %}
 
