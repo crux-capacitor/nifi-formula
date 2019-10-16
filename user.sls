@@ -1,14 +1,16 @@
+{% import_yaml slspath~'/config.yaml' as nifi %}
+
 "Manage NiFi Group":
   group.present:
-    - name: nifi
+    - name: {{ nifi.group.name }}
 
 "Manage NiFi User":
   user.present:
-    - name: nifi
-    - home: /opt/nifi
+    - name: {{ nifi.user.name }}
+    - home: {{ nifi.user.home_dir }}
     - createhome: True
     - shell: /bin/false
     - groups:
-      - nifi
+      - {{ nifi.group.name }}
     - require:
       - group: "Manage NiFi Group"
