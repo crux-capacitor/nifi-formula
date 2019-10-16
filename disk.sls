@@ -1,5 +1,10 @@
 {% import_yaml slspath~'/config.yaml' as nifi %}
 
+# Check if the 2nd disk has already been saved to the minion data store.
+# If not, run the first block to determine the device name of this disk, and then
+# save it to the data store. This is done because the command below only works once, before 
+# the disk has been formatted.
+# If it has been saved to the data store, just get the device name from there.
 {% if not salt.data.get('data_disk') %}
 {%   set data_disk = "/dev/" ~ salt.cmd.run("lsblk -d -s | grep disk | awk '{print $1}'", python_shell=True) %}
 {%   do salt.data.update('data_disk', data_disk) %}
@@ -28,6 +33,8 @@ include:
     - dump: 0
     - pass_num: 0
     - mount: True
+    - require:
+      - blockdev: "Format Nifi Data Disk"
 
 "Manage Mounted Nifi Directories":
   file.directory:
@@ -39,3 +46,4 @@ include:
     - file_mode: 644
     - require:
       - sls: formula.nifi.user
+      - mount: "Mount Nifi Data Disk"
