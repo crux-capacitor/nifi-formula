@@ -2,6 +2,9 @@
 
 include:
   - formula.nifi.user
+{%- if nifi.disk.enabled %}
+  - formula.nifi.disk
+{%- endif %}
   - formula.nifi.install
   - formula.nifi.config
   - formula.nifi.service
