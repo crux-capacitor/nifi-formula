@@ -1,0 +1,15 @@
+[Unit]
+Description=Apache NiFi
+After=network.target
+
+[Service]
+Type=forking
+User={{ user.name}}
+Group={{ group.name }}
+Environment="JAVA_HOME={{ salt.cmd.run('readlink -f /usr/bin/java | sed \'s:/bin/java::\'', python_shell=True) }}"
+ExecStart={{ user.home_dir }}/nifi-{{ version }}/bin/nifi.sh start
+ExecStop={{ user.home_dir }}/nifi-{{ version }}/bin/nifi.sh stop
+ExecRestart={{ user.home_dir }}/nifi-{{ version }}/bin/nifi.sh restart 
+
+[Install]
+WantedBy=multi-user.target
