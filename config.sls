@@ -35,18 +35,20 @@ include:
   file.recurse:
     - name: /opt/nifi/nifi-{{ version }}/conf
     - source: salt://{{ slspath }}/files/
-    - exclude_pat: E@(zookeeper.properties)|(myid)|(security-limits.conf)
+    - exclude_pat: E@(zookeeper.properties)|(myid)|(security-limits.conf)|(nifi.service)
     - user: nifi
     - group: nifi
     - template: jinja
     - context:
+        user: {{ nifi.user|json }}
         version: {{ version }}
         cluster: {{ nifi.cluster|json }}
         data_dir: {{ data_dir }}
         config: {{ nifi.config|json }}
         mem_size: {{ mem_size }}
-{%- if nifi.disk.enabled %}
     - require:
+      - sls: formula.nifi.install
+{%- if nifi.disk.enabled %}
       - sls: formula.nifi.disk
 {%- endif %}
 

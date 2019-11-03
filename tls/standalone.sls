@@ -8,6 +8,7 @@ include:
   cmd.run:
     - name: ./tls-toolkit.sh standalone -n {{ grains['fqdn'] }} -o /opt/nifi/nifi-{{ version }}/conf/
     - cwd: /opt/nifi/nifi-toolkit-{{ version }}/bin/
+    - runas: {{ nifi.user.name }}
     - creates: /opt/nifi/nifi-{{ version }}/conf/{{ grains['fqdn'] }}/keystore.jks
     - require:
       - sls: formula.nifi.toolkit

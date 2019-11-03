@@ -8,6 +8,8 @@ group:
 install:
   version: 1.9.2  # Gets concatenated into nifi-<version>-bin.tar.gz
 
+  java: {{ 'java-1.8.0-openjdk-headless.x86_64' if grains['os_family'] == "RedHat" else 'java-1.8.0-openjdk-headless.x86_64' }}
+  
 config:
   web:
     protocol: http              # http or https
@@ -37,7 +39,7 @@ cluster:
 # Dynamically set via pillar, which comes from AWS EC2 instance user data
   enabled: True
   name: {{ salt.pillar.get('nifi:cluster:name') }}
-  type: {{ salt.pillar.get('nifi:cluster:type, 'embedded') }}
+  type: {{ salt.pillar.get('nifi:cluster:type', 'embedded') }}
   connect_string: {{ cluster.connect_string }}
   #zk_servers: {# cluster.zk_servers #}
   zk_servers: ['ubuntu', 'abcd', 'efgh']
