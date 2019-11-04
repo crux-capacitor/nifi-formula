@@ -10,8 +10,8 @@ include:
     - template: jinja
     - context:
         version: {{ nifi.install.version }}
-        user: {{ nifi.user }}
-        group: {{ nifi.group }}
+        user: {{ nifi.user|json }}
+        group: {{ nifi.group|json }}
     - require:
       - sls: formula.nifi.install
   service.running:
