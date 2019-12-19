@@ -34,7 +34,7 @@ cluster:
 
 {% if salt.pillar.get('nifi:cluster') %}
 # Import cluster.yaml, which has the logic to find the other NiFi servers to be clustered with.
-{% import_yaml slspath~'/cluster.yaml' as cluster %}
+{% import_yaml 'formula/nifi/cluster.yaml' as cluster %}
 
 # Dynamically set via pillar, which comes from AWS EC2 instance user data
   enabled: True
