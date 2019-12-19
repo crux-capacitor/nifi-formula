@@ -1,4 +1,4 @@
-{% if 'cluster'= in grains['ec2']['user-data'] %}
+{% if 'cluster=' in grains['ec2']['user-data'] %}
 {%   for line in grains['ec2']['user-data'].splitlines() %}
 {%     if 'cluster=' in line %}
 {%       set name = line.split('=')[1] %}
