@@ -12,5 +12,6 @@ mine_functions:
     - mine_function: test.echo
     - {{ name }}
 
+{%     endif %}
 {%   endfor %}
 {% endif %}
