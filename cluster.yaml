@@ -9,8 +9,8 @@
 {% for server, ip in salt.mine.get('role:nifi', 'private_ip', tgt_type='grain').items() %}
 {%   for name, cluster_name in salt.mine.get(server, 'nifi_cluster_name', tgt_type='glob').items() %}
 {%     if cluster_name == my_cluster_name %}
-{%       do nifi_servers.append(ip~':2181') %}
-{%       do zk_servers.append(ip) %}
+{%       do nifi_servers.append(ip[0]~':2181') %}
+{%       do zk_servers.append(ip[0]) %}
 {%     endif %}
 {%   endfor %}
 {% endfor %}
