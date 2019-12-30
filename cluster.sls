@@ -12,7 +12,7 @@
     - template: jinja
     - user: nifi
     - context:
-        servers: {{ nifi.cluster.zk_servers }}
+        servers: {{ nifi.cluster.zk_servers|json }}
 
 "Manage Zookeeper Id File":
   file.managed:
