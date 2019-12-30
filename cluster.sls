@@ -3,6 +3,10 @@
 
 {% if nifi.cluster.enabled %}
 
+"Mine Update":
+  module.run:
+    - name: mine.update
+    
 {%   if nifi.cluster.type == "embedded" %}
 
 "Manage Zookeeper Properties File":
