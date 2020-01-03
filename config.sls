@@ -52,6 +52,30 @@ include:
       - sls: formula.nifi.disk
 {%- endif %}
 
+"Remove Authorizations File":
+  file.absent:
+    - name: /opt/nifi/nifi-{{ version }}/conf/authorizations.xml
+    - prereq:
+      - file: "Manage NiFi Config Files"
+
+"Remove Users File":
+  file.absent:
+    - name: /opt/nifi/nifi-{{ version }}/conf/users.xml
+    - prereq:
+      - file: "Manage NiFi Config Files"
+
+"Manage NiFi State Directory":
+  file.directory:
+    - name: /opt/nifi/nifi-{{ version }}/state
+    - user: nifi
+    - group: nifi
+    - dir_mode: 755
+    - file_mode: 644
+    - recurse:
+      - user
+      - group
+      - mode
+
 {% if nifi.config.best_practices.enabled %}
 
 "Manage Security Limits Config":
@@ -64,9 +88,9 @@ include:
     - name: vm.swappiness
     - value: 0
 
-"Set TCP Socket Time-Wait":
-  sysctl.present:
-    - name: net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait
-    - value: 1
+#"Set TCP Socket Time-Wait":
+#  sysctl.present:
+#    - name: net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait
+#    - value: 1
 
 {% endif %}
