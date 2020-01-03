@@ -4,17 +4,21 @@
 # The outer-loop returns the private_ip mine function of all nifi servers.
 # The next inner-loop gets the nifi_cluster_name from each nifi server individually, and compares it to this
 # system's cluster_name. If they match, append to the zk_servers list.
+{% set my_cluster_name = salt.pillar.get('nifi:cluster:name') %}
 {% set nifi_servers = [] %}
+{% set nifi_node_names = [] %}
 {% set zk_servers = [] %}
 {% for server, ip in salt.mine.get('role:nifi', 'private_ip', tgt_type='grain').items() %}
 {%   for name, cluster_name in salt.mine.get(server, 'nifi_cluster_name', tgt_type='glob').items() %}
 {%     if cluster_name == my_cluster_name %}
+{%       do nifi_node_names.append(name) %}
 {%       do nifi_servers.append(ip[0]~':2181') %}
 {%       do zk_servers.append(ip[0]) %}
 {%     endif %}
 {%   endfor %}
 {% endfor %}
 
+nifi_node_names: {{ nifi_node_names }}
 nifi_servers: {{ nifi_servers }}
 zk_servers: {{ zk_servers }}
 connect_string: {{ nifi_servers|join(',') }}
