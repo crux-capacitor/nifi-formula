@@ -6,14 +6,14 @@ group:
   name: nifi
 
 install:
-  version: 1.9.2  # Gets concatenated into nifi-<version>-bin.tar.gz
+  version: 1.10.0  # Gets concatenated into nifi-<version>-bin.tar.gz
 
   java: {{ 'java-1.8.0-openjdk-headless.x86_64' if grains['os_family'] == "RedHat" else 'java-1.8.0-openjdk-headless.x86_64' }}
-  
+
 config:
   web:
-    protocol: http              # http or https
-    port: 8080
+    protocol: https            # http or https
+    port: 8443
 
   tls:
     enabled: True
@@ -41,8 +41,8 @@ cluster:
   name: {{ salt.pillar.get('nifi:cluster:name') }}
   type: {{ salt.pillar.get('nifi:cluster:type', 'embedded') }}
   connect_string: {{ cluster.connect_string }}
-  #zk_servers: {# cluster.zk_servers #}
-  zk_servers: ['ubuntu', 'abcd', 'efgh']
+  zk_servers: {{ cluster.zk_servers }}
+  node_names: {{ cluster.zk_servers }}
 
 {% else %}
   # Manual cluster configuration
