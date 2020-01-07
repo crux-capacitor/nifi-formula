@@ -1,0 +1,13 @@
+nifi:
+  certificates:
+    ca_cert: |
+        -----BEGIN CERTIFICATE-----
+        MIIDSTCCAjGgAwIBAgIKAW+BnIbtAAAAADANBgkqhkiG9w0BAQsFADAjMQ0wCwYD
+        I95wJnSYbmaw854s3EcIeJgsq/mCR4pAjdAQbfg=
+        -----END CERTIFICATE-----
+
+    ca_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEowIBAAKCAQEA3RK3ZfEqIH7TVYfOEdE03vnIWng2C7Q7uLhnNPGGAvKPdLGo
+        1myRFmlt5ilFtNvzr714PqN2UMeV0k6DnKp2eRfC+BdaQXCdt4tI
+        -----END RSA PRIVATE KEY-----
