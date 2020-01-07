@@ -11,9 +11,6 @@ mine_functions:
   nifi_cluster_name:
     - mine_function: test.echo
     - {{ name }}
-  nifi_public_key:
-    - mine_function: file.read
-    - /opt/nifi/tls/{{ grains['private_ip'] }}/public.pem
 
 {%     endif %}
 {%   endfor %}
