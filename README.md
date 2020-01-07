@@ -4,9 +4,10 @@ This formula can be used to install NiFi and apply a handful of different config
 
  * clustering using embedded ZK
     * it even supports multiple named clusters so you can run different flows
+ * secured cluster communications
+ * running the UI on HTTPS
  * standalone TLS mode
  * usage of a 2nd disk for storage of the flowfile, provenance, etc
- * LDAP authentication (still a WIP)
 
 This was designed to run on AWS and is optimized to be installed on Amazon Linux 2 instances, however it should work on RedHat and Ubuntu as well.
 
@@ -15,8 +16,25 @@ This was designed to run on AWS and is optimized to be installed on Amazon Linux
 This formula requires a few things to run smoothly.
 
 1. Custom grain `role` set to `nifi` on all NiFi servers.
-1. Custom grain `private_ip` set to the system's private IP address on the network. Not a list of IPs.
-1. Put the `pillar.example` file in pillar roots, and apply to all NiFi servers.
+1. Custom grain `private_ip` set to the system's private IP address on the network (not a list of IPs).
+   
+   You can get the custom grain script [here](https://raw.githubusercontent.com/crux-capacitor/salt-master/master/salt/_grains/private_ip.py?token=AEJ3RR523D5NYW5Y5Z3YMJS6CT26U).
+1. Custom grain `ec2`.
+
+   You can get the custom grain script [here](https://raw.githubusercontent.com/saltstack/salt-contrib/master/grains/ec2_info.py).
+1. Put the `cluster_pillar.example` file in pillar roots (renamed to `cluster.sls`), and apply to all NiFi servers.
+1. Put the `certificates_pillar.example` file in pillar roots (renamed to `certificates.sls`), and apply to all NiFi servers.
+1. Fill out the `certificates.sls` pillar file with either your CA, intermediate CA or a self-signed CA cert, following the example format.
+
+   Instructions on generating a cert using the NiFi TLS toolkit are [here](https://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html#standalone)
+   
+   Here is an example command to create a self-signed CA cert to be used when generating the cluster node certificates:
+   
+   `./tls-toolkit.sh standalone -n nifi-ca -o .`
+   
+   This will generate a new folder in the current folder named `nifi-ca`. 
+   
+   In there you'll find `nifi-cert.pem` and `nifi-key.key`. These are what you need to put into the `certificates.sls` pillar file, into `ca_cert` and `ca_key`, respectively.
 1. The following mine function on all NiFi servers. Preferably set via minion config.
 
 ```
