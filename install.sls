@@ -11,7 +11,7 @@ include:
 "Extract NiFi Archive":
   archive.extracted:
     - name: /opt/nifi/
-    - source: 
+    - source:
       #- http://us.mirrors.quenda.co/apache/nifi/{{ version }}/nifi-{{ version }}-bin.zip
       - salt://{{ slspath }}/installers/nifi-{{ version }}-bin.zip
     - user: nifi

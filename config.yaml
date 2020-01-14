@@ -16,7 +16,7 @@ config:
     port: 8443
 
   tls:
-    enabled: True
+    enabled: tls
     type: standalone          # standalone or clientserver. Standalone will generate self-signed certs on each node.
     server_addr: null         # fill this out if using clientserver
     server_port: null         # fill this out if using clientserver
