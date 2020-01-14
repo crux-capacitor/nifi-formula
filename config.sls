@@ -58,12 +58,6 @@ include:
     - prereq:
       - file: "Manage NiFi Config Files"
 
-"Remove Users File":
-  file.absent:
-    - name: /opt/nifi/nifi-{{ version }}/conf/users.xml
-    - prereq:
-      - file: "Manage NiFi Config Files"
-
 "Manage NiFi State Directory":
   file.directory:
     - name: /opt/nifi/nifi-{{ version }}/state

@@ -18,3 +18,13 @@ extend:
         - file: "Manage Zookeeper Properties File"
         - file: "Manage Zookeeper Id File"
 {%- endif %}
+
+# If clustering is enabled, make sure this event
+# to update the other NiFi servers happens last.
+{%- if nifi.cluster.enabled %}
+
+  "Trigger NiFi Infra Update":
+    event:
+      - order: last
+
+{%- endif %}
