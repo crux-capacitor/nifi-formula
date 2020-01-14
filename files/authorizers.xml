@@ -8,10 +8,8 @@
         <class>org.apache.nifi.authorization.FileUserGroupProvider</class>
         <property name="Users File">./conf/users.xml</property>
         <property name="Legacy Authorized Users File"></property>
-{%- set count = 1 %}
 {%- if config.tls.enabled %}
-        <property name="Initial User Identity {{ count }}">{{ config.initial_admin.dn }}</property>
-{%- set count = count + 1 %}
+        <property name="Initial User Identity 1">{{ config.initial_admin.dn }}</property>
 {%- endif %}
     </userGroupProvider>
 
