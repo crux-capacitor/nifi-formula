@@ -6,7 +6,17 @@
 "Mine Update":
   module.run:
     - name: mine.update
-    
+
+{% for host in nifi.cluster.hosts %}
+
+"Manage Host Entry - {{ host.name }} -> {{ host.ip }}":
+  host.present:
+    - ip: {{ host.ip }}
+    - names:
+      - {{ host.name }}
+
+{% endfor %}
+
 {%   if nifi.cluster.type == "embedded" %}
 
 "Manage Zookeeper Properties File":
@@ -17,6 +27,8 @@
     - user: nifi
     - context:
         servers: {{ nifi.cluster.zk_servers|json }}
+    - onchanges_in:
+      - event: "Trigger NiFi Infra Update"
 
 "Manage Zookeeper Id File":
   file.managed:
@@ -29,6 +41,8 @@
         zk_props_file: /opt/nifi/nifi-{{ version }}/conf/zookeeper.properties
     - require:
       - file: "Manage Zookeeper Properties File"
+    - onchanges_in:
+      - event: "Trigger NiFi Infra Update"
 
 {%   else %}
 
@@ -36,5 +50,11 @@
   test.fail_without_changes
 
 {%   endif %} # end if-block testing type == "embedded"
+
+"Trigger NiFi Infra Update":
+  event.send:
+    - name: infra/update/nifi
+    - data:
+        role: nifi
 
 {% endif %} # end if-block testing cluster.enabled

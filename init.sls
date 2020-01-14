@@ -18,3 +18,9 @@ extend:
         - file: "Manage Zookeeper Properties File"
         - file: "Manage Zookeeper Id File"
 {%- endif %}
+
+{%- if nifi.cluster.enabled %}
+  "Trigger NiFi Infra Update":
+    event:
+      - order: last
+{%- endif %}

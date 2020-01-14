@@ -16,10 +16,13 @@ config:
     port: 8443
 
   tls:
-    enabled: True
+    enabled: tls
     type: standalone          # standalone or clientserver. Standalone will generate self-signed certs on each node.
     server_addr: null         # fill this out if using clientserver
     server_port: null         # fill this out if using clientserver
+
+  initial_admin:                 # only created if using https
+    dn: 'CN=nifiadmin, OU=NIFI'  # Exact DN used when creating the initial admin client certificate
 
   # Enabling this will configure some of the NiFi Recommended Best Practices
   # See: https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#configuration-best-practices
@@ -42,7 +45,7 @@ cluster:
   type: {{ salt.pillar.get('nifi:cluster:type', 'embedded') }}
   connect_string: {{ cluster.connect_string }}
   zk_servers: {{ cluster.zk_servers }}
-  node_names: {{ cluster.zk_servers }}
+  hosts: {{ cluster.nifi_hosts }}
 
 {% else %}
   # Manual cluster configuration
