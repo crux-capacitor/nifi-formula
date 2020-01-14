@@ -48,4 +48,3 @@ include:
       - sls: formula.nifi.toolkit
       - file: "Manage CA Certificate"
       - file: "Manage CA Key"
-

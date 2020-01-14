@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tenants>
+    <groups>
+        <group identifier="8af6d350-016f-1000-ffff-ffff8155094d" name="{{ cluster.name }}">
+        </group>
+    </groups>
+    <users>
+        <user identifier="9309f3b0-ef41-3014-ab0a-d55b8fe43d64" identity="{{ config.initial_admin.dn }}"/>
+    </users>
+</tenants>
