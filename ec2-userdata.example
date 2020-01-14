@@ -3,6 +3,6 @@
 #cluster=central-logging
 curl -L https://bootstrap.saltstack.com -o /root/install_salt.sh
 sudo sh /root/install_salt.sh -P -X stable 2019.2.2
-echo "master: 10.0.0.10" > /etc/salt/minion.d/custom.conf
+echo "master: 10.0.0.10" > /etc/salt/minion.d/master.conf
 echo "role: nifi" > /etc/salt/grains
 service salt-minion start
